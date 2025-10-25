@@ -1,6 +1,6 @@
 // middleware/authMiddleware.js
 const jwt = require('jsonwebtoken');
-const JWT_SECRET = 'your-super-secret-key-that-should-be-long-and-random';
+const JWT_SECRET = 'antarvia-secret-key-for-jwt-2025';
 
 function authMiddleware(req, res, next) {
   const authHeader = req.header('Authorization');

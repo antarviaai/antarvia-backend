@@ -1,37 +1,56 @@
-// models/MaintenanceRequest.js
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const MaintenanceRequestSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true,
-  },
-  category: {
-    type: String,
-    required: true,
-  },
-  location: {
-    type: String,
-    required: true,
-  },
-  details: {
-    type: String,
-    required: true,
-  },
-  permissionToEnter: {
-    type: Boolean,
-    default: false,
-  },
-  status: {
-    type: String,
-    enum: ['Submitted', 'In Progress', 'Completed'],
-    default: 'Submitted',
-  },
-  submittedDate: {
-    type: Date,
-    default: Date.now,
-  },
+const maintenanceRequestSchema = new Schema({
+    // Information from the resident
+    submittedBy: { 
+        type: Schema.Types.ObjectId, 
+        ref: 'User', 
+        required: true 
+    },
+    unitNumber: {
+        type: String,
+        required: true
+    },
+    title: { 
+        type: String, 
+        required: true 
+    },
+    description: { 
+        type: String, 
+        required: true 
+    },
+    photos: [{ // An array to hold URLs of uploaded photos
+        type: String 
+    }],
+
+    // Information added by management
+    status: {
+        type: String,
+        enum: ['New', 'In Progress', 'Completed', 'Cancelled'],
+        default: 'New'
+    },
+    urgency: {
+        type: String,
+        enum: ['Low', 'Medium', 'High'],
+        default: 'Medium'
+    },
+    assignedTo: { // Will link to a Staff or User model
+        type: Schema.Types.ObjectId,
+        ref: 'User' 
+    },
+    internalNotes: [{
+        note: String,
+        author: { type: Schema.Types.ObjectId, ref: 'User' },
+        createdAt: { type: Date, default: Date.now }
+    }],
+    
+    // Timestamps
+    completedAt: {
+        type: Date
+    }
+}, { 
+    timestamps: true // Adds `createdAt` and `updatedAt` automatically
 });
 
-module.exports = mongoose.model('MaintenanceRequest', MaintenanceRequestSchema);
+module.exports = mongoose.model('MaintenanceRequest', maintenanceRequestSchema);
